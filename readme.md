@@ -1,11 +1,15 @@
-=== Wiki Embed ===
-Contributors: enej, ejackisch, devindra, ctlt-dev, ubcdev
+=== Tieteen termipankki embed code ===
+Contributors: enej, ejackisch, devindra, ctlt-dev, ubcdev, wilenius
 Tags: mediawiki, wiki, wiki-embed, embed, content framework, wiki inc, 
 Requires at least: 3.0
 Tested up to: 3.3
 Stable tag: 1.4.7
 
-Wiki Embed lets you embed mediawiki pages in to your site, sites like Wikipedia
+Tieteen termipankki embed code lets you embed pages from the Tieteen termipankki (https://tieteentermipankki.fi/wiki/Termipankki:Etusivu) in to your site.
+
+It is based on the wiki-embed plugin, a generic plugin that lets you embed mediawiki pages on Wordpress sites.
+
+As it stands, the plugin has only been tested with the Antropologia namespace, but should work with little modifications for other namespaces as well.
 
 == Description ==
 
