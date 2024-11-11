@@ -1,4 +1,4 @@
-=== Tieteen termipankki embed code ===
+# Tieteen termipankki embed code
 
 Contributors: enej, ejackisch, devindra, ctlt-dev, ubcdev, wilenius
 Tags: mediawiki, wiki, wiki-embed, embed, content framework, wiki inc, 
@@ -6,13 +6,15 @@ Requires at least: 3.0
 Tested up to: 3.3
 Stable tag: 1.4.7
 
-Tieteen termipankki embed code lets you embed pages from the Tieteen termipankki (https://tieteentermipankki.fi/wiki/Termipankki:Etusivu) in to your site.
+Tieteen termipankki embed code lets you embed pages from the Tieteen termipankki (https://tieteentermipankki.fi/wiki/Termipankki:Etusivu) into your site.
 
 It is based on the wiki-embed plugin, a generic plugin that lets you embed mediawiki pages on Wordpress sites.
 
 As it stands, the plugin has only been tested with the Antropologia namespace, but should work with little modifications for other namespaces as well.
 
-== Description ==
+Rest of the README is from the original plugin (see https://github.com/ubc/wiki-embed).
+
+## Description
 
 
 This plugin will pull content from any Media Wiki website (Such as wikipedia.org).
@@ -36,26 +38,25 @@ Checkout our Support page http://support.cms.ubc.ca/cms-manual/adding-content/em
 
 
 
-== Frequently Asked Questions ==
+## Frequently Asked Questions
 
-= Could you use this to replicate the whole of Wikipedia = 
+### Could you use this to replicate the whole of Wikipedia
 
 Maybe, but why would you want to? That is not what the tool was designed to do. 
 
-= Images are now showing up properly =
+### Images are now showing up properly
 This might have to do with your MediaWiki Install make sure its set in such a way that allows you to embed images from the media wiki into another site. 
 
-= Dark background WordPress themes =
+### Dark background WordPress themes
 Sorry, but at the moment this plugin works well with themes that have a white background. 
 
 To make it work with a dark background you need to change your css to add rules that will make it work with your theme.
 
-= How do I import wiki pages into my site =
+### How do I import wiki pages into my site
 This plugin is not a wiki importer. It helps mirror wiki pages inside your WordPress site.
 
-= 
 
-== Usage ==
+## Usage
 
 Wiki Embed is implemented using the shortcode [wiki-embed]. It accepts the following arguments:
 * url: (required) the web address of the wiki article that you want to embed on this page.
@@ -69,20 +70,20 @@ Example;
 `[wiki-embed url="http://en.wikipedia.org/wiki/Example" no-edit no-contents no-infobox accordion]`
 
 
-== Configuration ==
+## Configuration
 
 Settings for the plugin can be found in 'Wiki Embed' -> 'Settings'.
 Here you can enable/disable various features, define shortcode defaults, and configure some global settings for the plugin.
 
 
-== Installation ==
+## Installation
 
 1. Upload `wiki-embed` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Change the wiki embed settings to your liking
 
 
-== Screenshots ==
+## Screenshots
 
 1. A page that list all the wiki content that is embedded on the site. 
 2. A look at the wiki embed settings page. 
