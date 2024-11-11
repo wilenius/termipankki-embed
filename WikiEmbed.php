@@ -1,11 +1,12 @@
 <?php
 /**
- * Plugin Name: Wiki Embed
+ * Plugin Name: Tieteen termipankki embed code
  * Plugin URI: http://wordpress.org/extend/plugins/wiki-embed/
- * Description: Enables the inclusion of mediawiki pages into your own blog page or post through the use of shortcodes.
+ * Description: Lets you embed pages from the Tieteen termipankki (https://tieteentermipankki.fi/wiki/Termipankki:Etusivu) into your site.
+
  * Version: 1.4.9
- * Author: Enej Bajgoric, Devindra Payment, CTLT, UBC
- * Author URI: http://cms.ubc.ca
+ * Author: Enej Bajgoric, Devindra Payment, CTLT, UBC, Heikki Wilenius
+ * Author URI: http://www.iki.fi/hw/
  *
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU
@@ -764,7 +765,8 @@ Class Wiki_Embed {
 		$wiki_embed_end = '';
 		if ( $has_source ) {
 			$source_text = ( isset( $this->options['default']['pre-source'] ) ? $this->options['default']['pre-source'] : "source:" );
-			$wiki_embed_end .= '<span class="wiki-embed-source">'.$source_text.' <a href="'.esc_url( urldecode($url)) .'">'.urldecode($url).'</a></span>';
+    // we won't display this for AB
+    //  $wiki_embed_end .= '<span class="wiki-embed-source">'.$source_text.' <a href="'.esc_url( urldecode($url)) .'">'.urldecode($url).'</a></span>';
 		}
 
 		// add special wiki embed classed depending on what should be happening
@@ -1002,6 +1004,10 @@ Class Wiki_Embed {
 			$html = new DOMDocument();
 			$html->loadHTML( '<?xml version="1.0" encoding="UTF-8"?>' . $wiki_page_body );
 
+      // Strip the H1 element prefix and capitalize the word after the colon
+      // Also create a link based on the element
+      $this->process_h1_element($html);
+
 			//Remove specified elements
 			$remove_elements = explode( ",", $remove );
 
@@ -1009,12 +1015,14 @@ Class Wiki_Embed {
 			if ( $has_no_edit ):
 				$remove_elements[] = '.editsection';
 			endif; // end of removing links
+      
+      // remove selite
+      //$remove_elements[] = '#expfi';
 
-			// remove table of contents
+      // remove table of contents
 			if ( $has_no_contents ):
 				$remove_elements[] = '#toc';
 			endif;
-
 			// remove infobox
 			if ( $has_no_infobox ):
 				$remove_elements[] = '.infobox';
@@ -1125,27 +1133,29 @@ Class Wiki_Embed {
 				$index++;
 			}
 
-			if ( $has_tabs ) { // Accordions
-				$tab_list = apply_filters( 'wiki-embed-tab_list', $tab_list );
-				$start = '<div class="wiki-embed-tabs wiki-embed-fragment-count-'.$count.'">'; // shell div
+      // commented out so that termipankki template stuff works
+			//if ( $has_tabs ) { // Accordions
+			//	$tab_list = apply_filters( 'wiki-embed-tab_list', $tab_list );
+			//	$start = '<div class="wiki-embed-tabs wiki-embed-fragment-count-'.$count.'">'; // shell div
 
-				$tabs_shell_class = apply_filters( 'wiki-embed-tabs-shell-class', 'wiki-embed-tabs-nav');
+			//	$tabs_shell_class = apply_filters( 'wiki-embed-tabs-shell-class', 'wiki-embed-tabs-nav');
 
-				if ( ! empty( $tab_list ) ) {
-					$start .= '<ul class="'.$tabs_shell_class.'">'.$tab_list.'</ul>';
-				}
+			//	if ( ! empty( $tab_list ) ) {
+			//		$start .= '<ul class="'.$tabs_shell_class.'">'.$tab_list.'</ul>';
+			//	}
 
-				$articles_content = apply_filters( 'wiki-embed-articles', implode( " ", $article_sections ), 'tabs' );
-			} elseif ( $has_accordion ) { // Tabs
-				$start = '<div id="accordion-wiki-'.$this->content_count.'" class="wiki-embed-shell wiki-embed-accordion wiki-embed-fragment-count-'.$count.'">'; // shell div
-				$articles_content = apply_filters( 'wiki-embed-articles', implode( " ", $article_sections ), 'accordion' );
-			} else { // None
+			//	$articles_content = apply_filters( 'wiki-embed-articles', implode( " ", $article_sections ), 'tabs' );
+			//} elseif ( $has_accordion ) { // Tabs
+			//	$start = '<div id="accordion-wiki-'.$this->content_count.'" class="wiki-embed-shell wiki-embed-accordion wiki-embed-fragment-count-'.$count.'">'; // shell div
+			//	$articles_content = apply_filters( 'wiki-embed-articles', implode( " ", $article_sections ), 'accordion' );
+			//} else { // None
 				$start = '<div class="wiki-embed-shell wiki-embed-fragment-count-'.$count.'">'; // shell div
 				$articles_content = apply_filters( 'wiki-embed-articles', implode( " ", $article_sections ), 'none' );
-			}
+			//}
 
-			$wiki_page_body = $article_intro . $start . $articles_content . '</div>';
-		} // end of content modifications
+  	$wiki_page_body = $article_intro . $start . $articles_content . '</div>';
+ 
+    } // end of content modifications
 
 		//clear the error buffer since we're not interested in handling minor HTML errors here
 		libxml_clear_errors();
@@ -1169,6 +1179,93 @@ Class Wiki_Embed {
 			return false;
 		}
 	}
+
+  // this works, but let's try another one    
+  //function process_h1_element($html) {
+  //  $h1s = $html->getElementsByTagName('h1');
+  //  foreach ($h1s as $h1) {
+  //      $title = $h1->nodeValue;
+  //      if (strpos($title, 'Antropologia:') === 0) {
+  //          $title = substr($title, strlen('Antropologia:'));
+  //          $title = ucfirst($title);
+  //          $h1->nodeValue = $title;
+  //          $url = 'https://tieteentermipankki.fi/wiki/Antropologia:' . urlencode(lcfirst($title));
+  //          $link = '<a id="readmore" href="' . $url . '">Lue lisää: ' . $url . '</a>';
+  //          $linkCreated = true;
+  //      }
+  //    }
+  //    if ($linkCreated) {
+  //      // Create a new DOM element for the link
+  //      $fragment = $html->createDocumentFragment();
+  //      $fragment->appendXML($link);
+//
+//        // Append the link to the end of the body
+//        $html->getElementsByTagName('body')->item(0)->appendChild($fragment);
+//    }
+//}
+
+function process_h1_element($html) {
+    // Find the h1 element
+    $h1s = $html->getElementsByTagName('h1');
+    $h1 = $h1s->item(0);
+    $title = $h1->nodeValue;
+	
+	// Change the h1 into a h4
+	$h4 = $html->createElement('h4', $title);
+	$h1->parentNode->replaceChild($h4, $h1);
+
+    // Modify the h1 element if it starts with 'Antropologia:'
+    // This needs to be modified so that it works with ordinary entries too,
+    // they don't start with "Antropologia"
+    if (strpos($title, 'Antropologia:') === 0) {
+      $title = substr($title, strlen('Antropologia:'));
+      }
+    $title = ucfirst($title);
+    $h4->nodeValue = $title;
+    $url = 'https://tieteentermipankki.fi/wiki/Antropologia:' . urlencode(lcfirst($title));
+    $link = '<span id="readmore"><a id="readmorelink" href="' . $url . '">Lue lisää</a></span>';
+
+    $linkCreated = true;
+
+    // Find the div elements with the ids deffi and expfi
+    $deffi = $html->getElementById('deffi');
+    $expfi = $html->getElementById('expfi');
+
+    // Create a new document fragment to hold the new structure
+    $newFragment = $html->createDocumentFragment();
+
+    // Import the h1, deffi, and expfi elements into the new document fragment
+    // change to h4
+    if ($h4) {
+        $newFragment->appendChild($h4);
+    }
+    if ($deffi) {
+        $newFragment->appendChild($deffi);
+    }
+    if ($expfi) {
+        $newFragment->appendChild($expfi);
+    }
+
+    // If a link was created, append it to the new fragment
+    if (isset($linkCreated) && $linkCreated) {
+        $linkFragment = $html->createDocumentFragment();
+        $linkFragment->appendXML($link);
+        $newFragment->appendChild($linkFragment);
+    }
+
+    // Clear the existing body content
+    $body = $html->getElementsByTagName('body')->item(0);
+    while ($body->firstChild) {
+        $body->removeChild($body->firstChild);
+    }
+
+    // Append the new fragment to the body
+    $body->appendChild($newFragment);
+
+    // Replace the old body with the new one
+    //$html->replaceChild($body, $html->getElementsByTagName('body')->item(0));
+}
+
 
 	/* FILTERS */
 	/**
