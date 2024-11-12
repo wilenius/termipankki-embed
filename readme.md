@@ -5,7 +5,9 @@ Contributors: enej, ejackisch, devindra, ctlt-dev, ubcdev, wilenius
 Tags: mediawiki, wiki, wiki-embed, embed, content framework, wiki inc, 
 
 Requires at least: 3.0
+
 Tested up to: 3.3
+
 Stable tag: 1.4.7
 
 Tieteen termipankki embed code lets you embed pages from the Tieteen termipankki (https://tieteentermipankki.fi/wiki/Termipankki:Etusivu) into your site.
